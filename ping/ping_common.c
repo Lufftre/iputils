@@ -302,6 +302,7 @@ void print_timestamp(struct ping_rts *rts)
 	}
 }
 
+unsigned long long int tor_counter = 0;
 /*
  * pinger --
  * 	Compose and transmit an ICMP ECHO REQUEST packet.  The IP packet
@@ -358,6 +359,11 @@ int pinger(struct ping_rts *rts, ping_func_set_st *fset, socket_st *sock)
 
 resend:
 	i = fset->send_probe(rts, sock, rts->outpack, sizeof(rts->outpack));
+    tor_counter++;
+    if(rts->opt_verbose) {
+        printf("tor_count=%llu ntransmit=%li\n", tor_counter, rts->ntransmitted);
+        fflush(stdout);
+    }
 
 	if (i == 0) {
 		oom_count = 0;
